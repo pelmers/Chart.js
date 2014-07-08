@@ -19,6 +19,9 @@
 		//Number - Width of the grid lines
 		scaleGridLineWidth : 1,
 
+		//Boolean - Whether to place x labels at the end of each bar rather than the middle
+		offsetXLabels : false,
+
 		//Boolean - If there is a stroke on each bar
 		barShowStroke : true,
 
@@ -47,6 +50,7 @@
 
 			this.ScaleClass = Chart.Scale.extend({
 				offsetGridLines : true,
+				offsetXLabels: options.offsetXLabels,
 				calculateBarX : function(datasetCount, datasetIndex, barIndex){
 					//Reusable method for calculating the xPosition of a given bar based on datasetIndex & width of the bar
 					var xWidth = this.calculateBaseWidth(),

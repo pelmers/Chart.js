@@ -1506,7 +1506,7 @@
 				ctx.font = this.font;
 				each(this.yLabels,function(labelString,index){
 					var yLabelCenter = this.endPoint - (yLabelGap * index),
-						linePositionY = Math.round(yLabelCenter);
+					linePositionY = Math.round(yLabelCenter);
 
 					ctx.textAlign = "right";
 					ctx.textBaseline = "middle";
@@ -1542,7 +1542,7 @@
 				},this);
 
 				each(this.xLabels,function(label,index){
-					var xPos = this.calculateX(index) + aliasPixel(this.lineWidth),
+					var xPos = this.calculateX(index + (this.offsetXLabels ? 0.5 : 0)) + aliasPixel(this.lineWidth),
 						// Check to see if line/bar here and decide where to place the line
 						linePos = this.calculateX(index - (this.offsetGridLines ? 0.5 : 0)) + aliasPixel(this.lineWidth),
 						isRotated = (this.xLabelRotation > 0);
