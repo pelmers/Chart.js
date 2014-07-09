@@ -77,6 +77,8 @@
 				fontFamily: this.options.scaleFontFamily,
 				fontColor: this.options.scaleFontColor,
 				showLabels: this.options.scaleShowLabels,
+				imageLabelRef : this.options.scaleImageLabelRef,
+				imageLabelCoords : this.options.scaleImageLabelCoords,
 				showLabelBackdrop: this.options.scaleShowLabelBackdrop,
 				backdropColor: this.options.scaleBackdropColor,
 				backdropPaddingY : this.options.scaleBackdropPaddingY,

@@ -88,6 +88,12 @@
 			// String - Scale label font colour
 			scaleFontColor: "#666",
 
+			// DOM Ref - <img> tag, scaleImageLabelCoords must also be given
+			scaleImageLabelRef: null,
+
+			// Length-10 array of {sx: num, sy: num, sw: num, sh: num, dw: num, dh: num}
+			scaleImageLabelCoords: null,
+
 			// Boolean - whether or not the chart should be responsive and resize when the browser does.
 			responsive: false,
 
@@ -1602,8 +1608,6 @@
 					ctx.closePath();
 
 					if (this.imageLabelRef) {
-						// drawing images is much faster than rendering text
-						// see: http://jsperf.com/image-vs-text
 						var labelNum = ~~label;
 						var coords = labelToCoords(labelNum, this.imageLabelCoords);
 						var xShift = 0;
