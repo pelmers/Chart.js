@@ -1501,6 +1501,15 @@
 			var ctx = this.ctx,
 				yLabelGap = (this.endPoint - this.startPoint) / this.steps,
 				xStart = Math.round(this.xScalePaddingLeft);
+			function labelToCoords(label, labelCoords) {
+				var coords = [];
+				do {
+					coords.push(labelCoords[label % 10]);
+					label = (label / 10) | 0;
+				} while (label > 0);
+				coords.reverse();
+				return coords;
+			}
 			if (this.display){
 				ctx.fillStyle = this.textColor;
 				ctx.font = this.font;
@@ -1511,7 +1520,24 @@
 					ctx.textAlign = "right";
 					ctx.textBaseline = "middle";
 					if (this.showLabels){
-						ctx.fillText(labelString,xStart - 10,yLabelCenter);
+						if (this.imageLabelRef) {
+							// drawing images is much faster than rendering text
+							// see: http://jsperf.com/image-vs-text
+							var labelNum = ~~labelString;
+							if (labelString === ""+labelNum) {
+								var coords = labelToCoords(labelNum, this.imageLabelCoords);
+								var xPos = xStart - 10;
+								for (var c = 0; c < coords.length; c++) {
+									// read d as "destination" and s as "source"
+									ctx.drawImage(this.imageLabelRef,
+										coords[c].sx, coords[c].sy, coords[c].sw, coords[c].sh,
+										xPos, yLabelCenter, coords[c].dw, coords[c].dh);
+									xPos += coords[c].dw;
+								}
+							}
+						} else {
+							ctx.fillText(labelString,xStart - 10,yLabelCenter);
+						}
 					}
 					ctx.beginPath();
 					if (index > 0){
@@ -1575,14 +1601,29 @@
 					ctx.stroke();
 					ctx.closePath();
 
-					ctx.save();
-					ctx.translate(xPos,(isRotated) ? this.endPoint + 12 : this.endPoint + 8);
-					ctx.rotate(toRadians(this.xLabelRotation)*-1);
-					ctx.font = this.font;
-					ctx.textAlign = (isRotated) ? "right" : "center";
-					ctx.textBaseline = (isRotated) ? "middle" : "top";
-					ctx.fillText(label, 0, 0);
-					ctx.restore();
+					if (this.imageLabelRef) {
+						// drawing images is much faster than rendering text
+						// see: http://jsperf.com/image-vs-text
+						var labelNum = ~~label;
+						var coords = labelToCoords(labelNum, this.imageLabelCoords);
+						var xShift = 0;
+						for (var c = 0; c < coords.length; c++) {
+							// read d as "destination" and s as "source"
+							ctx.drawImage(this.imageLabelRef,
+									coords[c].sx, coords[c].sy, coords[c].sw, coords[c].sh,
+									xPos - 4 + xShift, this.endPoint + 8, coords[c].dw, coords[c].dh);
+							xShift += coords[c].dw;
+						}
+					} else {
+						ctx.save();
+						ctx.translate(xPos,(isRotated) ? this.endPoint + 12 : this.endPoint + 8);
+						ctx.rotate(toRadians(this.xLabelRotation)*-1);
+						ctx.font = this.font;
+						ctx.textAlign = (isRotated) ? "right" : "center";
+						ctx.textBaseline = (isRotated) ? "middle" : "top";
+						ctx.fillText(label, 0, 0);
+						ctx.restore();
+					}
 				},this);
 
 			}

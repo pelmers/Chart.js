@@ -216,6 +216,8 @@
 				gridLineColor : (this.options.scaleShowGridLines) ? this.options.scaleGridLineColor : "rgba(0,0,0,0)",
 				padding : (this.options.showScale) ? 0 : (this.options.barShowStroke) ? this.options.barStrokeWidth : 0,
 				showLabels : this.options.scaleShowLabels,
+				imageLabelRef : this.options.scaleImageLabelRef,
+				imageLabelCoords : this.options.scaleImageLabelCoords,
 				display : this.options.showScale
 			};
 
